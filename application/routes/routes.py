@@ -8,9 +8,16 @@ from application.routes.forms import RegistrationForm, LoginForm
 main = Blueprint('main', __name__)
 
 @main.route("/")
+@main.route("/home")
 def home():
     docs = mongo.db.test.find()
-    return render_template("home.html", docs = docs)
+    return render_template("home.html", title = "Home",  docs = docs)
+
+
+@main.route("/about")
+def about():
+
+    return render_template("about.html", title = "About")
 
 @main.route("/admin")
 def admin():
@@ -24,4 +31,4 @@ def register():
 @main.route("/login")
 def login():
     form = LoginForm()
-    return render_template("Login.html", title = "Login", form = form)
+    return render_template("login.html", title = "Login", form = form)
