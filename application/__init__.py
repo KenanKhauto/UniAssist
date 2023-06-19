@@ -18,7 +18,7 @@ def create_app():
     login_manager.init_app(app)
     bcrypt.init_app(app)
 
-    login_manager.login_view = "login"
+    login_manager.login_view = "main.login"  # this is what we pass for @login_required
     login_manager.login_message_category = "info"
 
 
