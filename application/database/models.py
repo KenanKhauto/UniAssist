@@ -1,5 +1,5 @@
 from flask_login import UserMixin
-from application.helper.json_encoder import JSONEncoder
+
 
 class User(UserMixin):
     """
@@ -28,6 +28,8 @@ class User(UserMixin):
         self.username = user_data['username']
         self.password = user_data['password']
         self.email = user_data['email']
+        self.image_file = user_data['image_file']
+       
 
     def to_json(self):
         """
@@ -43,7 +45,8 @@ class User(UserMixin):
             '_id': self.id,
             'username': self.username,
             'password': self.password,
-            'email': self.email
+            'email': self.email,
+            'image_file':self.image_file
         }
     
 

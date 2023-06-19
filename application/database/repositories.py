@@ -64,7 +64,7 @@ class UserRepository:
             return User(user_data)
         return None
 
-    def register_user(self, username, password, email):
+    def register_user(self, username, password, email, image_file):
         """
         Register a new user.
 
@@ -81,7 +81,7 @@ class UserRepository:
         available_ids = set(range(1, max(existing_ids, default=0) + 2)) - set(existing_ids)
         user_id = min(available_ids)
 
-        user_data = {'_id': user_id, 'username': username, 'password': password, 'email': email}
+        user_data = {'_id': user_id, 'username': username, 'password': password, 'email': email, 'image_file' : 'default.jpg'}
         mongo.db.users.insert_one(user_data)
 
         user = User(user_data)
@@ -99,3 +99,19 @@ class UserRepository:
         """
         mongo.db.users.create_index("username", unique=True)
         mongo.db.users.create_index("email", unique=True)
+
+
+    def update_user_username(self, user):
+        filter = {'_id': user.id}
+        new_username = {"$set" : {"username" : user.username}} 
+        mongo.db.users.update_one(filter, new_username)
+
+    def update_user_email(self, user):
+        filter = {'_id': user.id}
+        new_email = {"$set" : {"email" : user.email}} 
+        mongo.db.users.update_one(filter, new_email)
+
+    def update_user_image(self, user):
+        filter = {'_id': user.id}
+        new_image = {"$set" : {"image_file" : user.image_file}} 
+        mongo.db.users.update_one(filter, new_image)
