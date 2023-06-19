@@ -1,8 +1,8 @@
+
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
-from wtforms.validators import DataRequired, Length, Email, EqualTo
-
-### For MrNaji the idiot ###
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+from application.custom import user_rep
 
 # you know that in html you have to create forms (look them up if do not know them)
 # This here is just a shortcut for us in order to spare us some time with html and css
@@ -17,14 +17,26 @@ class RegistrationForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField("Email", validators=[DataRequired(), Email()])
     password = PasswordField("Password", validators=[DataRequired()])
-    confirm_password = PasswordField("Password", validators=[DataRequired(), EqualTo("password")])
+    confirm_password = PasswordField("Confirm your Password", validators=[DataRequired(), EqualTo("password")])
     submit = SubmitField("Sign Up")
+    
 
+    ## Make sure that the field does not exist in database
+    ## if it exists, raise error
+    def validate_username(self, username):
+        user = user_rep.find_user_by_username(username.data)
+        if user:
+            raise ValidationError("That username is taken. Please choose a different one")
+        
+    def validate_email(self, email):
+        email = user_rep.find_user_by_email(email.data)
+        if email:
+            raise ValidationError("That email is taken. Please choose a different one")
 
 
 class LoginForm(FlaskForm):
 
     email = StringField("Email", validators=[DataRequired(), Email()])
     password = PasswordField("Password", validators=[DataRequired()])
-    remember = BooleanField("Remember Me") # Just to make the user stays logged in for some minutes after leaving the browser
-    submit = SubmitField("Sign Up")
+    remember = BooleanField("Remember Me") # Just to make the user stays logged 
+    submit = SubmitField("Login")
