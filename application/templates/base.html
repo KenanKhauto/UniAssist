@@ -28,22 +28,45 @@
                     <a class="nav-item nav-link" href="{{ url_for('main.about') }}">About</a>
                   </div>
                     <!-- Navbar Right Side -->
-                  <div class="navbar-nav">
-                    {% if current_user.is_authenticated %}
-                      <a class="nav-item nav-link" href="{{ url_for('main.logout') }}">Logout</a>
-                      <a class="nav-item nav-link" href="{{ url_for('main.account') }}">Account</a>
-                    {% else %}
-                      <a class="nav-item nav-link" href="{{ url_for('main.login') }}">Login</a>
-                      <a class="nav-item nav-link" href="{{ url_for('main.register') }}">Register</a>
-                    {% endif %}
-                  </div>
-              </div>
+                </div>
+                <!--
+                <div class="navbar-nav">
+                  {% if current_user.is_authenticated %}
+                    <a class="nav-item nav-link" href="{{ url_for('main.logout') }}">Logout</a>
+                    <a class="nav-item nav-link" href="{{ url_for('main.account') }}">Account</a>
+                  {% else %}
+                    <a class="nav-item nav-link" href="{{ url_for('main.login') }}">Login</a>
+                    <a class="nav-item nav-link" href="{{ url_for('main.register') }}">Register</a>
+                  {% endif %}
+                </div>
+                -->
+                {% if current_user.is_authenticated == False %}
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link" href="{{ url_for('main.register') }}">Register</a>
+                    <a class="nav-item nav-link" href="{{ url_for('main.login') }}">Login</a>
+                </div>
+                {% else %}
+                <div class="dropdown">
+                    <div class="navbar-nav mr-auto">
+                      <a class="nav-item nav-link" href="#">
+                        <img class="rounded-circle nav-img" src="{{ url_for('static', filename='profile_pics/' + current_user.image_file )}}">
+                      </a>
+                    </div>
+                <div class="dropdown-content">
+                      <a href="{{ url_for('main.account') }}">Profile</a>
+                      <a href="{{ url_for('main.logout') }}">Logout</a>
+                      <a href="https://www.youtube.com/user/hubspot">YouTube</a>
+                </div>
+                </div>
+                  
+                {% endif %}
             </div>
+                
         </nav>
       
         </header>
       
-        <main role="main" class="container">
+        <main role="main" class="container ">
             <div class="row">
               <div class="col-md-8">
                 {% with messages = get_flashed_messages(with_categories=true) %}

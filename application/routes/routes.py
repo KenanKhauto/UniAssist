@@ -75,7 +75,7 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode("utf-8")
-        user_rep.register_user(username=form.username.data, password=hashed_password, email=form.email.data, image_file="")
+        user_rep.register_user(username=form.username.data, password=hashed_password, email=form.email.data)
         flash(f"Your account has been created! You are now able to log in", category="success")
         return redirect(url_for("main.login"))
 
@@ -102,11 +102,11 @@ def login():
         user = user_rep.find_user_by_email(email=form.email.data)
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
-            flash("You have been logged in!", "success")
+            flash("You have been logged in!", category="success")
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(url_for("main.home"))
         else:
-            flash("Login unsuccessful. Please check email and password", "danger")
+            flash("Login unsuccessful. Please check email and password", category="danger")
 
     return render_template("login.html", title="Login", form=form)
 

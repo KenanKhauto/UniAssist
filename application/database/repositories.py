@@ -1,6 +1,5 @@
 from application.extensions import mongo
 from .models import User
-from bson import ObjectId
 
 class UserRepository:
     """
@@ -64,7 +63,7 @@ class UserRepository:
             return User(user_data)
         return None
 
-    def register_user(self, username, password, email, image_file):
+    def register_user(self, username, password, email):
         """
         Register a new user.
 
