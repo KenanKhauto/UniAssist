@@ -10,8 +10,13 @@ h1, h2, h3, h4, h5, h6 {
   color: #444444;
 }
 
+header {
+  margin-bottom:  100px;
+}
+
 .bg-steel {
-  background-color: #5f788a;
+  background-color: #275c35;
+
 }
 
 .site-header .navbar-nav .nav-link {
@@ -79,4 +84,55 @@ a.article-title:hover {
 
 .account-heading {
   font-size: 2.5rem;
+}
+
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  width: 180px;
+  top: 100%;
+  background-color: #fff;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px 0;
+}
+
+.dropdown.open .dropdown-content {
+  display: block;
+}
+
+.dropdown-content a {
+  display: block;
+  color: #333;
+  font-weight: bold;
+  padding: 10px 20px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdown-content a:first-child {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.dropdown-content a:last-child {
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+
+.nav-img {
+  height: 45px;
+  width: 45px;
+  margin-right: 16px;
 }
