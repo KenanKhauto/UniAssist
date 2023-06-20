@@ -1,6 +1,0 @@
-home
-about 
-loging 
-logout 
-tasks
-notes
