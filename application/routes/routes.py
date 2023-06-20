@@ -32,3 +32,7 @@ def register():
 def login():
     form = LoginForm()
     return render_template("login.html", title = "Login", form = form)
+
+@main.route("/sidebar")
+def sidebar():
+    return render_template("sidebar.html")

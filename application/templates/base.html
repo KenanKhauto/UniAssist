@@ -12,7 +12,9 @@
         {% else %}
             <title>UniAssist - Base </title>
         {% endif %}
-    
+        
+        <!-- script used for bringing icons from fronawsome website -->
+        <script src="https://kit.fontawesome.com/ad2f0887b8.js" crossorigin="anonymous"></script>
     </head>
     <body>
 
@@ -38,7 +40,7 @@
             </div>
         </nav>
         </header>
-
+        {% block sidebar %}{% endblock %}
         <main role="main" class="container">
             <div class="row">
               <div class="col-md-8">
