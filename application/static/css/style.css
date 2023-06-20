@@ -14,8 +14,13 @@ header {
   margin-bottom:  100px;
 }
 
+.site-header {
+  position: relative;
+  z-index: 999;
+}
+
 .bg-steel {
-  background-color: #275c35;
+  background-color: #212121;
 
 }
 
