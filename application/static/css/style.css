@@ -141,3 +141,22 @@ a.article-title:hover {
   width: 45px;
   margin-right: 16px;
 }
+
+.move-left-20 {
+  transform: translateX(-20px);
+}
+
+.move-down-23 {
+  transform: translateY(23px); /* Adjust the value as per your requirement */
+}
+
+.move-down-10 {
+  transform: translateY(10px); /* Adjust the value as per your requirement */
+}
+
+.move-down-16 {
+  transform: translateY(16px); /* Adjust the value as per your requirement */
+}
+.move-up-10 {
+  transform: translateY(-20px); /* Adjust the value as per your requirement */
+}
