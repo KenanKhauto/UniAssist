@@ -125,8 +125,22 @@ class UserRepository:
 class BookRepository:
     
 
-    def find_book_by_name(name):
+    def find_book_by_name(self, name):
         book_data = mongo.db.books.find_one({'book_name':name})
         if book_data:
             return Book(book_data)
-        return None 
+        return None
+    
+    def find_books_per_user(self, user_id):
+        book_data = mongo.db.books.find({'user_id':user_id})
+        if book_data:
+            return [book for book in book_data]
+        return None
+
+    def save_book_in_DB(self, book_data):
+        check_for_book = self.find_book_by_name(book_data["book_name"])
+        if check_for_book:
+            return None
+        mongo.db.books.insert_one(book_data)
+        book = Book(book_data)
+        return book

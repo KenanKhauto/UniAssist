@@ -4,7 +4,7 @@ from PIL import Image
 from flask import render_template, request, redirect, Blueprint, flash, url_for, current_app
 from application import login_manager, bcrypt
 from application.routes.forms import RegistrationForm, LoginForm, UpdateAccountForm,AddBookForm
-from application.custom import user_rep
+from application.custom import user_rep, book_rep
 from flask_login import login_user, current_user, logout_user, login_required
 from werkzeug.utils import secure_filename
 
@@ -167,12 +167,20 @@ def account():
 @login_required
 def add_book():
     form = AddBookForm()
+    books_user = book_rep.find_books_per_user(current_user.id)
+    print(books_user)
     if form.validate_on_submit():
-        pdf_file = request.files["pdf"]
-        file_name = secure_filename(form.book.data.filename)
+        pdf_file = form.book_file.data
+        file_name = secure_filename(form.book_file.data.filename)
         pdf_path = os.path.join(current_app.root_path, 'static/books', file_name)
         pdf_file.save(pdf_path)
-        flash("Your book has been added successfuly!", category="success")
-        return redirect(url_for("main.add_book"))
+        book_dic = {"book_name":form.book_name.data, "book_file":file_name, "user_id":current_user.id}
+        request_bool = book_rep.save_book_in_DB(book_dic)
+        if request_bool:
+            flash("Your book has been added successfuly!", category="success")
+            return redirect(url_for("main.add_book"))
+        else:
+            flash("You already have this book!", category='info')
+            return redirect(url_for("main.add_book"))
    
-    return render_template("add_book.html", titel="Add a book", form=form)
+    return render_template("add_book.html", titel="Add a book", form=form, books_user=books_user)

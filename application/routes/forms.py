@@ -94,5 +94,5 @@ class UpdateAccountForm(FlaskForm):
 class AddBookForm(FlaskForm):
     book_name = StringField('Give the book any name you want:',
                            validators=[DataRequired(), Length(min=5, max=40)])
-    path = FileField('Add a book to your collection!', validators=[DataRequired(), FileAllowed(['pdf'])])
+    book_file = FileField('Add a book to your collection!', validators=[DataRequired(), FileAllowed(['pdf'])])
     submit = SubmitField('Add')
