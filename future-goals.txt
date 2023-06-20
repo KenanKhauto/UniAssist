@@ -21,7 +21,7 @@
         their overall progress.
 
     -   Study Reminders and Notifications: Send reminders and notifications to students about upcoming exams, assignment 
-    -   due dates, and study milestones. Personalized notifications can help students stay motivated and engaged with their studies.
+        due dates, and study milestones. Personalized notifications can help students stay motivated and engaged with their studies.
 
     -   Goal Setting: Enable students to set academic goals and track their progress towards achieving them. Students can 
         define goals, such as improving grades or mastering specific subjects, and the application can provide insights and 
