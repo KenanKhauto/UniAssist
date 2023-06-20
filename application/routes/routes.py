@@ -3,9 +3,10 @@ import secrets
 from PIL import Image
 from flask import render_template, request, redirect, Blueprint, flash, url_for, current_app
 from application import login_manager, bcrypt
-from application.routes.forms import RegistrationForm, LoginForm, UpdateAccountForm
+from application.routes.forms import RegistrationForm, LoginForm, UpdateAccountForm,AddBookForm
 from application.custom import user_rep
 from flask_login import login_user, current_user, logout_user, login_required
+from werkzeug.utils import secure_filename
 
 main = Blueprint('main', __name__)
 
@@ -158,3 +159,20 @@ def account():
     print(image_file)
     return render_template('account.html', title='Account',
                            image_file=image_file, form=form)
+
+
+
+
+@main.route("/add_book", methods=['GET', 'POST'])
+@login_required
+def add_book():
+    form = AddBookForm()
+    if form.validate_on_submit():
+        pdf_file = request.files["pdf"]
+        file_name = secure_filename(form.book.data.filename)
+        pdf_path = os.path.join(current_app.root_path, 'static/books', file_name)
+        pdf_file.save(pdf_path)
+        flash("Your book has been added successfuly!", category="success")
+        return redirect(url_for("main.add_book"))
+   
+    return render_template("add_book.html", titel="Add a book", form=form)

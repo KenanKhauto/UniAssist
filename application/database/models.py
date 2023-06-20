@@ -64,3 +64,13 @@ class User(UserMixin):
     @property
     def is_anonymous(self):
         return False
+
+
+class Book:
+
+    def __init__(self, book_data):
+        
+        self.id = book_data['_id']
+        self.book_name = book_data['book_name']
+        self.path = book_data['path']
+        self.user_id =book_data['user_id']

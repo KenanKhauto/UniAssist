@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
+from flask_wtf.form import _Auto
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from application.custom import user_rep
@@ -88,3 +89,10 @@ class UpdateAccountForm(FlaskForm):
             user = user_rep.find_user_by_email(email.data)
             if user:
                 raise ValidationError('That email is taken. Please choose a different one.')
+            
+
+class AddBookForm(FlaskForm):
+    book_name = StringField('Give the book any name you want:',
+                           validators=[DataRequired(), Length(min=5, max=40)])
+    path = FileField('Add a book to your collection!', validators=[DataRequired(), FileAllowed(['pdf'])])
+    submit = SubmitField('Add')

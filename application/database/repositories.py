@@ -1,5 +1,5 @@
 from application.extensions import mongo
-from .models import User
+from .models import User, Book
 
 class UserRepository:
     """
@@ -114,3 +114,19 @@ class UserRepository:
         filter = {'_id': user.id}
         new_image = {"$set" : {"image_file" : user.image_file}} 
         mongo.db.users.update_one(filter, new_image)
+
+
+
+
+
+
+
+
+class BookRepository:
+    
+
+    def find_book_by_name(name):
+        book_data = mongo.db.books.find_one({'book_name':name})
+        if book_data:
+            return Book(book_data)
+        return None 
