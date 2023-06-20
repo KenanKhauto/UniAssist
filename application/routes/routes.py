@@ -158,13 +158,3 @@ def account():
     print(image_file)
     return render_template('account.html', title='Account',
                            image_file=image_file, form=form)
-
-
-
-@main.route("/sidenav")
-def sidenav():
-    return render_template("sidenav.html")
-
-@main.route("/topnav")
-def topnav():
-    return render_template("topnav.html")
