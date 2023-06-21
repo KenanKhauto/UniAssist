@@ -8,16 +8,21 @@
 <div class="container" style="display: flex;">
 
         <div class="" style="width: 70%; height: 900px;" >
-            <embed src="{{ url_for('static', filename='books/mml-book.pdf') }}" type="application/pdf" style="width: 90%; height: 100%; border-radius: 20px;border: 5px solid  #212121;">
+            <embed src="{{ pdf_file }}" type="application/pdf" style="width: 90%; height: 100%; border-radius: 20px;border: 5px solid  #212121;">
         </div>
    
 
         <div class="content-section" style="width: 30%; height: 900px; border: 5px solid  #212121;  border-radius: 20px;">
             <h4>Add external notes here</h4>
+            <form>
+                <textarea name="textarea" rows="20" cols="40" style="width: 90%; height: 70%; border-radius: 20px;border: 5px solid  #212121;"></textarea>
+                <br>
+                <input type="submit" value="Submit" style="width: 90%; height: 10%; border-radius: 20px;border: 5px solid  #212121;">
+            </form>
+
+
         </div>
 
 </div>
 </div>
-
-
 {% endblock %}

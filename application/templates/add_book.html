@@ -46,7 +46,7 @@
     <ul class="list-group">
         {% for book in books_user  %}
         <li class="list-group-item list-group-item-light">
-            <a href="{{ url_for('static', filename='books/' + book.book_file) }}">
+            <a href="{{ url_for('main.view_book', book_id = book.id ) }}">
                 {{ book.book_name }}
             </a>
         </li>

@@ -125,6 +125,13 @@ class UserRepository:
 class BookRepository:
     
 
+    def find_book_by_id(self, book_id):
+        book_data = mongo.db.books.find_one({'_id': book_id})
+        print(book_data)
+        if book_data:
+            return Book(book_data)
+        return None
+
     def find_book_by_name(self, name):
         book_data = mongo.db.books.find_one({'book_name':name})
         if book_data:
@@ -134,13 +141,52 @@ class BookRepository:
     def find_books_per_user(self, user_id):
         book_data = mongo.db.books.find({'user_id':user_id})
         if book_data:
-            return [book for book in book_data]
+            books_list = []
+            for book in book_data:
+                book_obj = Book(book)
+                books_list.append(book_obj)
+            return books_list
         return None
 
     def save_book_in_DB(self, book_data):
-        check_for_book = self.find_book_by_name(book_data["book_name"])
+        check_for_book = self.find_book_by_id(book_data["_id"])
         if check_for_book:
             return None
-        mongo.db.books.insert_one(book_data)
+        
+        
+        inserted_book = mongo.db.books.insert_one(book_data)
+        book_id = inserted_book.inserted_id
+
+
+        user_id = book_data["user_id"]
+        mongo.db.users.update_one({"_id": user_id}, {"$push": {"books_ids": book_id}})
+
+        book_data["_id"] = book_id
         book = Book(book_data)
         return book
+    
+    def delete_book_from_DB_by_name(self, book_name):
+        mongo.db.books.delete_one({'book_name':book_name})
+    
+    def delete_book_from_DB_by_id(self, book_id):
+        mongo.db.books.delete_one({'_id':book_id})
+
+    def get_notes(self, book_id):
+        book_data = self.find_book_by_id(book_id)
+        if book_data:
+            return book_data["notes"]
+        return None
+    
+    def delete_note_from_DB(self, book_id, note_id):
+        book_data = self.find_book_by_id(book_id)
+        if book_data:
+            notes = book_data["notes"]
+            for note in notes:
+                if note["note_id"] == note_id:
+                    notes.remove(note)
+                    break
+            filter = {'_id': book_id}
+            new_notes = {"$set" : {"notes" : notes}} 
+            mongo.db.books.update_one(filter, new_notes)
+            return True
+        return False

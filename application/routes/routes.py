@@ -1,12 +1,12 @@
 import os
-import secrets
-from PIL import Image
+
 from flask import render_template, request, redirect, Blueprint, flash, url_for, current_app
 from application import login_manager, bcrypt
 from application.routes.forms import RegistrationForm, LoginForm, UpdateAccountForm,AddBookForm
 from application.custom import user_rep, book_rep
 from flask_login import login_user, current_user, logout_user, login_required
 from werkzeug.utils import secure_filename
+from application.routes.utils import book_hash_user_id, save_picture
 
 main = Blueprint('main', __name__)
 
@@ -118,18 +118,7 @@ def logout():
     return redirect(url_for("main.home"))
 
 
-def save_picture(form_picture):
-    random_hex = secrets.token_hex(8)
-    _, f_ext = os.path.splitext(form_picture.filename)
-    picture_fn = random_hex + f_ext
-    picture_path = os.path.join(current_app.root_path, 'static/profile_pics', picture_fn)
 
-    output_size = (125, 125)
-    i = Image.open(form_picture)
-    i.thumbnail(output_size)
-    i.save(picture_path)
-
-    return picture_fn
 
 
 @main.route("/account", methods=['GET', 'POST'])
@@ -163,30 +152,61 @@ def account():
 
 
 
+
+
 @main.route("/add_book", methods=['GET', 'POST'])
 @login_required
 def add_book():
     form = AddBookForm()
     books_user = book_rep.find_books_per_user(current_user.id)
-    print(books_user)
+
     if form.validate_on_submit():
         pdf_file = form.book_file.data
-        file_name = secure_filename(form.book_file.data.filename)
-        pdf_path = os.path.join(current_app.root_path, 'static/books', file_name)
+        file_name = secure_filename(pdf_file.filename)
+        pdf_path = os.path.join(current_app.root_path, 'static', 'books', file_name)
         pdf_file.save(pdf_path)
-        book_dic = {"book_name":form.book_name.data, "book_file":file_name, "user_id":current_user.id}
-        request_bool = book_rep.save_book_in_DB(book_dic)
-        if request_bool:
-            flash("Your book has been added successfuly!", category="success")
-            return redirect(url_for("main.add_book"))
+        book_id = book_hash_user_id(form.book_name.data, current_user.id)
+        book_dic = {"_id": book_id, "book_name": form.book_name.data, "book_file": file_name,
+                    "user_id": current_user.id}
+
+        if book_rep.save_book_in_DB(book_dic):
+            flash("Your book has been added successfully!", "success")
         else:
-            flash("You already have this book!", category='info')
-            return redirect(url_for("main.add_book"))
-   
-    return render_template("add_book.html", titel="Add a book", form=form, books_user=books_user)
+            flash("You already have this book!", "info")
+
+        return redirect(url_for("main.add_book"))
+
+    return render_template("add_book.html", title="Add a Book", form=form, books_user=books_user)
 
 
-@main.route("/view_book", methods=['GET', 'POST'])
+@main.route("/view_book/<book_id>", methods=['GET', 'POST'])
 @login_required
-def view_book():
-    return render_template('bookview.html')
+def view_book(book_id):
+    book = book_rep.find_book_by_id(int(book_id))
+    if not book:
+        flash("Book not found.", "danger")
+        return redirect(url_for("main.add_book"))
+    
+    pdf_file = url_for('static', filename='books/' + book.book_file)
+    print(pdf_file)
+    return render_template('view_book.html', book=book, pdf_file=pdf_file)
+
+
+
+# create a route that gets all the books of a specific user
+@main.route("/books/<user_id>", methods=['GET', 'POST'])
+@login_required
+def books(user_id):
+    books = book_rep.find_books_per_user(user_id)
+    return render_template('books.html', books=books)
+
+
+'''# create a route that deletes a book
+@main.route("/delete_book/<book_id>", methods=['GET', 'POST'])
+@login_required
+def delete_book(book_id):
+    book = book_rep.find_book_by_id(book_id)
+    book_rep.delete_book(book)
+    flash("Your book has been deleted!", category="success")
+    return redirect(url_for('main.add_book'))'''
+

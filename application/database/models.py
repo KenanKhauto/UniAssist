@@ -74,3 +74,16 @@ class Book:
         self.book_name = book_data['book_name']
         self.book_file = book_data['book_file']
         self.user_id = book_data['user_id']
+        #self.notes = book_data['notes']
+
+
+class Note:
+    
+        def __init__(self, note_data):
+            
+            self.id = note_data['_id']
+            self.note_name = note_data['note_name']
+            self.note_file = note_data['note_file']
+            self.user_id = note_data['user_id']
+            self.book_id = note_data['book_id']
+            
