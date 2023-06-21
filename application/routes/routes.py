@@ -184,3 +184,9 @@ def add_book():
             return redirect(url_for("main.add_book"))
    
     return render_template("add_book.html", titel="Add a book", form=form, books_user=books_user)
+
+
+@main.route("/view_book", methods=['GET', 'POST'])
+@login_required
+def view_book():
+    return render_template('bookview.html')

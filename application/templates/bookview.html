@@ -1,0 +1,23 @@
+
+{% extends "base.html" %}
+{% block content %}
+
+<div class="content-section" style="background-color:rgb(208, 208, 208); border-radius: 10px; border: 5px solid  #212121;">
+
+
+<div class="container" style="display: flex;">
+
+        <div class="" style="width: 70%; height: 900px;" >
+            <embed src="{{ url_for('static', filename='books/mml-book.pdf') }}" type="application/pdf" style="width: 90%; height: 100%; border-radius: 20px;border: 5px solid  #212121;">
+        </div>
+   
+
+        <div class="content-section" style="width: 30%; height: 900px; border: 5px solid  #212121;  border-radius: 20px;">
+            <h4>Add external notes here</h4>
+        </div>
+
+</div>
+</div>
+
+
+{% endblock %}
