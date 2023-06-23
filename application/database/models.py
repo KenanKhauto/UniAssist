@@ -87,3 +87,13 @@ class Note:
             self.user_id = note_data['user_id']
             self.book_id = note_data['book_id']
             
+
+class Post:
+
+    def __init__(self, id, title, content, date_posted, author) -> None:
+        self.id = id
+        self.title = title
+        self.content = content
+        self.date_posted = date_posted
+        self.author = author
+        

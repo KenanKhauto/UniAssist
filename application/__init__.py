@@ -3,6 +3,7 @@ from flask import Flask
 from .extensions import mongo, login_manager, bcrypt
 from .main.routes import main
 from .users.routes import users
+from .post.routes import post
 
 def create_app():
 
@@ -15,6 +16,7 @@ def create_app():
     mongo.init_app(app)
     app.register_blueprint(main)
     app.register_blueprint(users)
+    app.register_blueprint(post)
 
     login_manager.init_app(app)
     bcrypt.init_app(app)

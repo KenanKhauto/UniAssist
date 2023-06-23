@@ -1,4 +1,4 @@
-from .database.repositories import UserRepository, BookRepository
+from .database.repositories import UserRepository, PostRepository
 
 user_rep = UserRepository()
-book_rep = BookRepository()
+post_rep = PostRepository()
