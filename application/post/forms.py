@@ -8,7 +8,7 @@ from application.custom import user_rep
 
 class PostForm(FlaskForm):
     """
-    Form for user registration.
+    Form for creating new post.
     """
     title = StringField("Title", validators=[DataRequired()])
     content = StringField("Content", validators=[DataRequired()])
