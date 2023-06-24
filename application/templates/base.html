@@ -30,65 +30,89 @@
 
     <header class="site-header">
       <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
-        <div class="container">
-          <a class="navbar-brand mr-4" href="{{ url_for('main.home') }}">UniAssist</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarToggle" aria-controls="navbarToggle"
-            aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarToggle">
-            <div class="navbar-nav mr-auto">
-              <a class="nav-item nav-link" href="{{ url_for('main.home') }}">Home</a>
-              <a class="nav-item nav-link" href="{{ url_for('main.about') }}">About</a>
-            </div>
-            <!-- Navbar Right Side -->
+          <div class="container" >
+              <div>
+                <a class="navbar-brand mr-4" href="{{ url_for('main.home') }}">UniAssist</a>
+              </div>
+              
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"
+                  aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarToggle" style="display: flex; justify-content: space-between;">
+                  <div class="navbar-nav">
+                    <div class="search-bar">
+                      <form method="POST" action="{{ url_for('main.search') }}" onsubmit="return validateForm()">
+                          <div class="input-group">
+                              <input id="search_input" type="text" class="form-control" placeholder="Search ..." name="search_input"
+                                  aria-label="Search">
+                              <div class="input-group-append" style="margin-left: 10px;">
+                                  <button type="submit" class="btn btn-outline-light rounded-circle"
+                                      style="padding: 0.375rem 0.75rem;">
+                                      <i class="fa fa-search"></i>
+                                  </button>
+                              </div>
+                          </div>
+                          <script>
+                              // Clear search input when focused
+                              document.getElementById("search_input").addEventListener("focus", function () {
+                                  document.getElementById("search_input").value = "";
+                              });
+                              function validateForm() {
+                                    var searchInput = document.getElementById("search_input").value.trim();
+                                    if (searchInput === "") {      
+                                        return false; // Prevent form submission
+                                    }
+                                    return true; // Allow form submission
+                                }
+                          </script>
+                      </form>
+                  </div>
+                  </div>
+                  <div class="navbar-nav" style="align-content: center;">
+                      <!-- Navbar Right Side -->
+                      {% if current_user.is_authenticated == False %}
+                      <a class="nav-item nav-link" href="{{ url_for('users.register') }}">Register</a>
+                      <a class="nav-item nav-link" href="{{ url_for('users.login') }}">Login</a>
+                      {% else %}
+                      <div class="dropdown ml-auto" style="margin-top: 10px;">
+                          <a class="nav-item nav-link" href="#">
+                            <div >
+                              <i class="fa fa-plus fa-2xl" style="color: #ffffff;"></i>
+                          </div>
+                          </a>
+                          <div class="dropdown-content ml-auto">
+                              <a href="{{ url_for('post.new_post')}}">Add Article</a>
+                              <a href="#">Add Something</a>
+                          </div>
+                      </div>
+                      <div class="dropdown">
+                          <a class="nav-item nav-link" href="#">
+                              <img class="rounded-circle nav-img"
+                                  src="{{ url_for('static', filename='profile_pics/' + current_user.image_file )}}">
+                          </a>
+                          <div class="dropdown-content">
+                              <a href="{{ url_for('users.account') }}">Profile</a>
+                              <a href="{{ url_for('users.logout') }}">Logout</a>
+                              <a href="https://www.youtube.com/user/hubspot">YouTube</a>
+                          </div>
+                      </div>
+                      {% endif %}
+                  </div>
+              </div>
           </div>
-
-          {% if current_user.is_authenticated == False %}
-          <div class="navbar-nav">
-            <a class="nav-item nav-link" href="{{ url_for('users.register') }}">Register</a>
-            <a class="nav-item nav-link" href="{{ url_for('users.login') }}">Login</a>
-          </div>
-          {% else %}
-
-          <div class="dropdown move-left-20">
-            <div class="navbar-nav mr-auto">
-            <a class="nav-item nav-link" href="#">
-              <i class="fa-solid fa-plus fa-2xl" style="color: #ffffff;"></i>
-            </a>
-          </div>
-            <div class="dropdown-content move-down-23 move-left-20">
-              <a href="{{ url_for('post.new_post')}}">Add Article</a>
-              <a href="#">Add Something</a>
-            </div>
-          </div>
-          
-          <div class="dropdown">
-            <div class="navbar-nav mr-auto">
-              <a class="nav-item nav-link" href="#">
-                <img class="rounded-circle nav-img"
-                  src="{{ url_for('static', filename='profile_pics/' + current_user.image_file )}}">
-              </a>
-            </div>
-            <div class="dropdown-content move-down-10" >
-              <a href="{{ url_for('users.account') }}">Profile</a>
-              <a href="{{ url_for('users.logout') }}">Logout</a>
-              <a href="https://www.youtube.com/user/hubspot">YouTube</a>
-            </div>
-          </div>
-
-          {% endif %}
-        </div>
-
       </nav>
-    </header>
+  </header>
+  
+  
+  
+  
 
     <div class="area" >
       <nav class="main-menu" style="position: fixed;">
         <ul>
           <li>
-            <a href="https://jbfarrow.com">
+            <a href="{{ url_for('main.home') }}">
               <!-- <i class="fa fa-home fa-2x"></i> -->
               <i class="fa fa-solid fa-house fa-2x"></i>
               <span class="nav-text">
@@ -160,7 +184,7 @@
             </a>
           </li>
           <li>
-            <a href="#">
+            <a href="{{ url_for('main.about') }}">
               <i class="fa fa-info fa-2x"></i>
               <span class="nav-text">
                 About

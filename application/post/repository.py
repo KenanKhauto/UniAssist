@@ -30,4 +30,18 @@ class PostRepository:
         post.content = content
         mongo.db.posts.update_one({'_id': post.id}, {'$set': post.to_mongo()})
         return post
+    
+        
+    def search_posts(self, query):
+        if query is None or query == '':
+            return []
+        else:
+            posts = []
+            for post_data in mongo.db.posts.find({'$text': {'$search': query}}):
+                posts.append(Post.from_mongo(post_data))
+            return posts
+    
+    def create_search_index(self):
+        mongo.db.posts.create_index([('title', 'text'), ('content', 'text')])
+
 

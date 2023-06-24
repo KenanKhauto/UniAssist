@@ -116,3 +116,14 @@ class UserRepository:
         new_image = {"$set" : {"image_file" : user.image_file}} 
         mongo.db.users.update_one(filter, new_image)
 
+    def create_search_index(self):
+        mongo.db.users.create_index([('username', 'text'), ('email', 'text')])
+
+    def search_users(self, query):
+        if query is None or query == '':
+            return []
+        else:
+            users = []
+            for user_data in mongo.db.users.find({'$text': {'$search': query}}):
+                users.append(User(user_data))
+            return users

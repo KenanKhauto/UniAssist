@@ -30,3 +30,21 @@ def about():
         str: Rendered template for the about page.
     """
     return render_template("about.html", title="About")
+
+
+@main.route("/search", methods=['GET', 'POST'])
+def search():
+    """
+    Route handler for the search page.
+
+    Returns:
+        str: Rendered template for the search page.
+    """
+    if request.method == 'POST':
+        query = request.form.get('search_input')
+    else:
+        query = request.args.get('query')
+
+    posts = post_rep.search_posts(query)
+    users = user_rep.search_users(query)
+    return render_template("search_results.html", title="Search", posts=posts, users=users, query=query)
