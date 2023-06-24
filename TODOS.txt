@@ -1,0 +1,5 @@
+
+
+-   create a place and routes for notes and tasks
+-   in the studentplace link, add a grid for multiple tasks such as schedule builder
+-   add a search bar in the place where the home and about in top nav are. And enable searching for posts and users

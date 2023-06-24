@@ -17,10 +17,6 @@ def home():
     """
     #page = request.args.get('page', 1, type=int)
     posts = post_rep.find_posts()
-    for post in posts:
-        post.author = user_rep.find_user_by_id(post.author)
-    
-    
 
     return render_template("home.html", title="Home", posts=posts)
 
