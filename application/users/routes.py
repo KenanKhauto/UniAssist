@@ -45,7 +45,7 @@ def register():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode("utf-8")
         user_rep.register_user(username=form.username.data, password=hashed_password, email=form.email.data)
         flash(f"Your account has been created! You are now able to log in", category="success")
-        return redirect(url_for("main.login"))
+        return redirect(url_for("users.login"))
 
     return render_template("register.html", title="Register", form=form)
 

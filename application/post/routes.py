@@ -2,23 +2,20 @@ from flask import Blueprint, flash, redirect, url_for, render_template, request,
 from .forms import PostForm
 from application.custom import post_rep
 from flask_login import current_user, login_required
-from datetime import datetime
-from application.database.models import Post
 
 post = Blueprint('post', __name__)
 
 
 @post.route("/post/new", methods=['GET', 'POST'])
+@login_required
 def new_post():
     form = PostForm()
-    post = Post(id=1, title=form.title.data, content=form.content.data, author=current_user, date_posted=datetime.utcnow())
-    print(current_user.username)
     if form.validate_on_submit():
-        post_rep.insert_post(title=form.title.data, content=form.content.data, author=current_user, date_posted=datetime.utcnow())
+        post_rep.insert_post(title=form.title.data, content=form.content.data)
         flash('Your post has been created!', 'success')
         return redirect(url_for('main.home'))
     
-    return render_template('new_post.html', title='New Post', form=form, legend='New Post', post=post)
+    return render_template('new_post.html', title='New Post', form=form, legend='New Post')
 
 '''
 @post.route("/post/<int:post_id>")

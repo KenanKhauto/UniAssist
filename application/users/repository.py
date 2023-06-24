@@ -1,5 +1,6 @@
 from application.extensions import mongo
-from .models import User, Post
+from .models import User
+
 
 class UserRepository:
     """
@@ -114,15 +115,4 @@ class UserRepository:
         filter = {'_id': user.id}
         new_image = {"$set" : {"image_file" : user.image_file}} 
         mongo.db.users.update_one(filter, new_image)
-
-
-
-
-class PostRepository:
-
-
-    def insert_post(self, title, content, date_posted, author):
-        post = Post(id=1, title=title, content=content, date_posted=date_posted, author=author)
-        post_data = {"_id" : post.id, "title" : post.title, "content" : post.content, "date_posted" : post.date_posted, "user_id" : post.author.id}
-        mongo.db.posts.insert_one(post_data)
 

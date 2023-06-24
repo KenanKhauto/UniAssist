@@ -47,8 +47,8 @@
 
           {% if current_user.is_authenticated == False %}
           <div class="navbar-nav">
-            <a class="nav-item nav-link" href="{{ url_for('main.register') }}">Register</a>
-            <a class="nav-item nav-link" href="{{ url_for('main.login') }}">Login</a>
+            <a class="nav-item nav-link" href="{{ url_for('users.register') }}">Register</a>
+            <a class="nav-item nav-link" href="{{ url_for('users.login') }}">Login</a>
           </div>
           {% else %}
 
@@ -59,7 +59,7 @@
             </a>
           </div>
             <div class="dropdown-content move-down-23 move-left-20">
-              <a href="#">Add Article</a>
+              <a href="{{ url_for('post.new_post')}}">Add Article</a>
               <a href="#">Add Something</a>
             </div>
           </div>

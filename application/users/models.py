@@ -1,4 +1,5 @@
-from flask_login import UserMixin
+from flask_login import UserMixin, current_user
+from datetime import datetime
 
 
 class User(UserMixin):
@@ -64,36 +65,3 @@ class User(UserMixin):
     @property
     def is_anonymous(self):
         return False
-
-
-class Book:
-
-    def __init__(self, book_data):
-        
-        self.id = book_data['_id']
-        self.book_name = book_data['book_name']
-        self.book_file = book_data['book_file']
-        self.user_id = book_data['user_id']
-        #self.notes = book_data['notes']
-
-
-class Note:
-    
-        def __init__(self, note_data):
-            
-            self.id = note_data['_id']
-            self.note_name = note_data['note_name']
-            self.note_file = note_data['note_file']
-            self.user_id = note_data['user_id']
-            self.book_id = note_data['book_id']
-            
-
-class Post:
-
-    def __init__(self, id, title, content, date_posted, author) -> None:
-        self.id = id
-        self.title = title
-        self.content = content
-        self.date_posted = date_posted
-        self.author = author
-        
