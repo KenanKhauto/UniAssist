@@ -1,4 +1,5 @@
 
+import os
 from flask import Flask
 from .extensions import mongo, login_manager, bcrypt
 from .main.routes import main
@@ -10,8 +11,8 @@ def create_app():
 
     app = Flask(__name__)
 
-    app.config['SECRET_KEY'] = '9b1b6efaadc4821aa8dbc985588acb28'
-    app.config['MONGO_URI'] = 'mongodb+srv://kenan:Yyecgaa123123@cluster0.s0aykgz.mongodb.net/UniAssistDB?retryWrites=true&w=majority'
+    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+    app.config['MONGO_URI'] = os.environ.get('MONGO_URI')
 
     mongo.init_app(app)
     app.register_blueprint(main)

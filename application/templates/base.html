@@ -17,7 +17,19 @@
     <title>UniAssist - Base </title>
     {% endif %}
 
-    <!-- script used for bringing icons from fronawsome website -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/katex.min.css" 
+          integrity="sha384-D+9gmBxUQogRLqvARvNLmA9hS2x//eK1FhVb9PiU86gmcrBrJAQT8okdJ4LMp2uv" 
+          crossorigin="anonymous">
+    <!-- The loading of KaTeX is deferred to speed up page rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/katex.min.js" 
+            integrity="sha384-483A6DwYfKeDa0Q52fJmxFXkcPCFfnXMoXblOkJ4JcA8zATN6Tm78UNL72AKk+0O" 
+            crossorigin="anonymous"></script>
+    <!-- To automatically render math in text elements, include the auto-render extension: -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/contrib/auto-render.min.js" integrity="sha384-yACMu8JWxKzSp/C1YV86pzGiQ/l1YUfE8oPuahJQxzehAjEt2GiQuy/BIvl9KyeF" crossorigin="anonymous"
+        onload="renderMathInElement(document.body);"></script>   
+    <!--<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+     script used for bringing icons from fronawsome website -->
     <script src="https://kit.fontawesome.com/ad2f0887b8.js"
       crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -35,7 +47,6 @@
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
       integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
       crossorigin="anonymous"></script>
-
   </head>
   <body>
 
@@ -43,7 +54,7 @@
       <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
           <div class="container" >
               <div>
-                <a class="navbar-brand mr-4" href="{{ url_for('main.home') }}">UniAssist</a>
+                <a class="navbar-brand mr-4" href="{{ url_for('main.home') }}">StudentVillageOnline</a>
               </div>
               
               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"
@@ -232,8 +243,12 @@
         
         </div>
       </div>
-      
-      {% block content %}{% endblock %}
+
+      <div class="row">
+        <div class="col-md-8">
+          {% block content %}{% endblock %}
+        </div>
+      </div>
     </main>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
   </body>

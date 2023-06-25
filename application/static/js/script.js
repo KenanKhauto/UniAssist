@@ -7,3 +7,6 @@ $(document).on('click', function(event) {
     $('.dropdown').removeClass('open');
   }
 });
+
+// Process the math elements in the document using MathJax
+//MathJax.typesetPromise();
