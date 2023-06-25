@@ -44,39 +44,18 @@ def update_post(post_id):
     return render_template('new_post.html', title='Update Post',
                            form=form, legend='Update Post')
 
-'''
-
-@post.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
-@login_required
-def update_post(post_id):
-    post = Post.query.get_or_404(post_id)
-    if post.author != current_user:
-        abort(403)
-    form = PostForm()
-    if form.validate_on_submit():
-        post.title = form.title.data
-        post.content = form.content.data
-        db.session.commit()
-        flash('Your post has been updated!', 'success')
-        return redirect(url_for('post', post_id=post.id))
-    elif request.method == 'GET':
-        form.title.data = post.title
-        form.content.data = post.content
-    return render_template('create_post.html', title='Update Post',
-                           form=form, legend='Update Post')
-
-
 @post.route("/post/<int:post_id>/delete", methods=['POST'])
 @login_required
 def delete_post(post_id):
-    post = Post.query.get_or_404(post_id)
+    post = post_rep.find_post_by_id(post_id)
     if post.author != current_user:
         abort(403)
-    db.session.delete(post)
-    db.session.commit()
+    post_rep.delete_post(post=post)
     flash('Your post has been deleted!', 'success')
-    return redirect(url_for('home'))
+    return redirect(url_for('main.home'))
 
+
+'''
 
 @post.route("/user/<string:username>")
 def user_posts(username):

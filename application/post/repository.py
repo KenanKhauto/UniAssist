@@ -16,7 +16,7 @@ class PostRepository:
     
     def find_posts(self):
         posts = []
-        for post_data in mongo.db.posts.find():
+        for post_data in mongo.db.posts.find().sort('date_posted', -1):
             posts.append(Post.from_mongo(post_data))
         return posts
     
@@ -44,4 +44,12 @@ class PostRepository:
     def create_search_index(self):
         mongo.db.posts.create_index([('title', 'text'), ('content', 'text')])
 
-
+    def delete_post(self, post):
+        mongo.db.posts.delete_one({'_id': post.id})
+        return post
+    
+    def find_posts_by_author(self, author):
+        posts = []
+        for post_data in mongo.db.posts.find({'author': author}).sort('date_posted', -1):
+            posts.append(Post.from_mongo(post_data))
+        return posts
