@@ -3,3 +3,4 @@
 -   create a place and routes for notes and tasks
 -   in the studentplace link, add a grid for multiple tasks such as schedule builder
 -   add a search bar in the place where the home and about in top nav are. And enable searching for posts and users
+-   add the ability to create a group of users where you can show posts only from that group. Use this next semester in the tutorial sessions in uni
