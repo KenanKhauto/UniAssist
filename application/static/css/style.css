@@ -1,4 +1,5 @@
 @import "sidebar.css";
+@import "mytasks.css";
 
 body {
   background: #fafafa;
@@ -42,6 +43,23 @@ header {
   border: 1px solid #dddddd;
   border-radius: 3px;
   margin-bottom: 20px;
+}
+
+.article-section {
+  max-height: 800px; /* Set the maximum height as per your requirement */
+  overflow: auto; /* Enable scrolling for content that exceeds the maximum height */
+}
+
+.show-more {
+  display: none; /* Hide the "show more" link by default */
+}
+
+.content-section.show-more-active {
+  max-height: none; /* Remove the maximum height when "show more" is active */
+}
+
+.content-section.show-more-active .show-more {
+  display: inline; /* Display the "show more" link when active */
 }
 
 .article-title {
