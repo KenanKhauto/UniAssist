@@ -178,3 +178,34 @@ a.article-title:hover {
 .move-up-10 {
   transform: translateY(-20px); /* Adjust the value as per your requirement */
 }
+
+
+.extra-bottom {
+  padding-bottom: 2em;
+}
+
+.task {
+  width: 50%;
+}
+
+.task-id {
+  width: 10%;
+}
+
+.status {
+  width: 20%;
+}
+
+.update {
+  width: 10%;
+}
+
+.table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.table tr {
+  text-align: center;
+  vertical-align: middle;
+}

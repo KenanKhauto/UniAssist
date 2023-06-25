@@ -8,44 +8,98 @@ $(document).on('click', function(event) {
   }
 });
 
+// Handle the my_tasks requests and modals
 
-window.onload = function () {
-  bootlint.showLintReportForCurrentDocument([], {
-      hasProblems: false,
-      problemFree: false
+$(document).ready(function () {
+  // example: https://getbootstrap.com/docs/4.2/components/modal/
+  // show modal
+  $('#task-modal').on('show.bs.modal', function (event) {
+      const button = $(event.relatedTarget) // Button that triggered the modal
+      const taskID = button.data('source') // Extract info from data-* attributes
+      const content = button.data('content') // Extract info from data-* attributes
+
+      const modal = $(this)
+      if (taskID === 'New Task') {
+          modal.find('.modal-title').text(taskID)
+          $('#task-form-display').removeAttr('taskID')
+      } else {
+          modal.find('.modal-title').text('Edit Task ' + taskID)
+          $('#task-form-display').attr('taskID', taskID)
+      }
+
+      if (content) {
+          modal.find('.form-control').val(content);
+      } else {
+          modal.find('.form-control').val('');
+      }
+  })
+
+
+  $('#submit-task').click(function () {
+      const tID = $('#task-form-display').attr('taskID');
+      console.log($('#task-modal').find('.form-control').val())
+      $.ajax({
+          type: 'POST',
+          url: tID ? '/edit/' + tID : '/add_task',
+          contentType: 'application/json;charset=UTF-8',
+          data: JSON.stringify({
+              'description': $('#task-modal').find('.form-control').val()
+          }),
+          success: function (res) {
+              console.log(res.response)
+              location.reload();
+          },
+          error: function () {
+              console.log('Error');
+          }
+      });
   });
 
-  $('[data-toggle="tooltip"]').tooltip();
-
-  function formatDate(date) {
-      return (
-          date.getDate() +
-          "/" +
-          (date.getMonth() + 1) +
-          "/" +
-          date.getFullYear()
-      );
-  }
-
-  var currentDate = formatDate(new Date());
-
-  $(".due-date-button").datepicker({
-      format: "dd/mm/yyyy",
-      autoclose: true,
-      todayHighlight: true,
-      startDate: currentDate,
-      orientation: "bottom right"
+  $('.remove').click(function () {
+      const remove = $(this)
+      $.ajax({
+          type: 'POST',
+          url: '/delete/' + remove.data('source'),
+          success: function (res) {
+              console.log(res.response)
+              location.reload();
+          },
+          error: function () {
+              console.log('Error');
+          }
+      });
   });
 
-  $(".due-date-button").on("click", function (event) {
-      $(".due-date-button")
-          .datepicker("show")
-          .on("changeDate", function (dateChangeEvent) {
-              $(".due-date-button").datepicker("hide");
-              $(".due-date-label").text(formatDate(dateChangeEvent.date));
-          });
+  $('.state').click(function () {
+      const state = $(this)
+      const tID = state.data('source')
+      new_state = "Todo"
+      if (state.text() === "In Progress") {
+          new_state = "Complete"
+      } else if (state.text() === "Complete") {
+          new_state = "Todo"
+      } else if (state.text() === "Todo") {
+          new_state = "In Progress"
+      }
+
+      $.ajax({
+          type: 'POST',
+          url: '/edit/' + tID,
+          contentType: 'application/json;charset=UTF-8',
+          data: JSON.stringify({
+              'status': new_state
+          }),
+          success: function (res) {
+              console.log(res)
+              location.reload();
+          },
+          error: function () {
+              console.log('Error');
+          }
+      });
   });
-};
+
+});
 
 
 // Process the math elements in the document using MathJax

@@ -1,6 +1,6 @@
 from application.extensions import mongo
 from .models import User
-
+from application.tasks.models import Task
 
 class UserRepository:
     """
@@ -127,3 +127,45 @@ class UserRepository:
             for user_data in mongo.db.users.find({'$text': {'$search': query}}):
                 users.append(User(user_data))
             return users
+        
+    # add one task to list field "my_tasks" with task and user id
+    def add_task_by_user_id(self, user, description):
+        # get id of last task
+        tasks_ls = mongo.db.users.find_one({'_id': user.id})['my_tasks']
+        task_id = 1
+
+        if tasks_ls:
+            last_task_id = mongo.db.users.find_one({'_id': user.id})['my_tasks'][-1]['_id']
+            task_id = last_task_id + 1
+
+        task_dic = {'_id': task_id, 'description': description, 'status': 'Todo'}
+        task = Task(task_dic)
+        filter = {'_id': user.id}
+        new_task = {"$push" : {"my_tasks" : task.to_mongo()}}
+        mongo.db.users.update_one(filter, new_task)
+    
+    # update task status
+    def update_task_status(self, task_id, user, status):
+        filter = {'_id': user.id}
+        new_task = {"$set" : {"my_tasks.$[elem].status" : status}} 
+        mongo.db.users.update_one(filter, new_task, array_filters=[{"elem._id": task_id}])
+
+    # delete task from list field "my_tasks" with task and user id
+    def delete_task_from_user_by_id(self, user, task_id):
+        filter = {'_id': user.id}
+        new_task = {"$pull" : {"my_tasks" : {"_id":task_id}}} 
+        mongo.db.users.update_one(filter, new_task)
+
+    # find all tasks of user
+    def find_tasks_by_user_id(self, user):
+        user_id = user.id
+        tasks = []
+        for data in mongo.db.users.find_one({'_id': user_id})['my_tasks']:
+            tasks.append(Task(data))
+        
+        return tasks
+    
+    def update_task_description(self, task_id,  user, description):
+        filter = {'_id': user.id}
+        new_task = {"$set" : {"my_tasks.$[elem].description" : description}} 
+        mongo.db.users.update_one(filter, new_task, array_filters=[{"elem._id": task_id}])
