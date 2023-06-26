@@ -57,6 +57,7 @@ def update(task_id):
 
     return jsonify(result)
 
+
 @tasks.route("/delete/<int:task_id>", methods=['POST'])
 def delete(task_id):
     """ recieved post requests for entry updates """

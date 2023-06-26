@@ -131,7 +131,10 @@ class UserRepository:
     # add one task to list field "my_tasks" with task and user id
     def add_task_by_user_id(self, user, description):
         # get id of last task
-        tasks_ls = mongo.db.users.find_one({'_id': user.id})['my_tasks']
+        try:
+            tasks_ls = mongo.db.users.find_one({'_id': user.id})['my_tasks']
+        except:
+            tasks_ls = None           
         task_id = 1
 
         if tasks_ls:
@@ -159,9 +162,12 @@ class UserRepository:
     # find all tasks of user
     def find_tasks_by_user_id(self, user):
         user_id = user.id
-        tasks = []
-        for data in mongo.db.users.find_one({'_id': user_id})['my_tasks']:
-            tasks.append(Task(data))
+        try:
+            tasks = []
+            for data in mongo.db.users.find_one({'_id': user_id})['my_tasks']:
+                tasks.append(Task(data))
+        except:
+            return None
         
         return tasks
     
