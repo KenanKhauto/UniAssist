@@ -1,11 +1,12 @@
 from flask import Blueprint
 
-from flask import render_template, request, redirect, Blueprint, flash, url_for
+from flask import render_template, request, redirect, Blueprint, flash, url_for, jsonify
 from application import bcrypt, login_manager
 from .forms import RegistrationForm, LoginForm, UpdateAccountForm
 from application.custom import user_rep, post_rep
 from flask_login import login_user, current_user, logout_user, login_required
 from .utils import save_picture
+from .models import User
 
 users = Blueprint('users', __name__)
 
@@ -119,20 +120,45 @@ def account():
 
 @users.route("/user/<int:user_id>")
 def user_profile(user_id):
-    if current_user.id == user_id:
-        return redirect(url_for('users.account'))
+    try:
+        if current_user.id == user_id:
+            return redirect(url_for('users.account'))
+    except:
+        print("something went wrong")
     
     posts = post_rep.find_posts_by_author(user_id)
     user = user_rep.find_user_by_id(user_id)
     username = user.username
     email = user.email
-    image_file = user.image_file 
-    print(image_file)
+    image_file = user.image_file
+
+    is_following = current_user.id in user.followers
 
     return render_template('user_profile.html', title='Account',
                             image_file=image_file, 
                             posts=posts,
                             username=username,
-                            email=email)
+                            email=email,
+                            user_id=user_id,
+                            is_following=is_following)
 
 
+@users.route("/follow/<int:user_id>", methods=["POST", "GET"])
+@login_required
+def follow(user_id):
+    target = user_rep.find_user_by_id(user_id)
+    if not target:
+        return jsonify({'error': 'User not found'}), 404
+    #target_user = User(target)
+    current_user.follow(target)
+    return jsonify({'message': f'You are now following {target.username}'}), 200
+
+@users.route('/unfollow/<int:user_id>', methods=['POST', "GET"])
+@login_required
+def unfollow(user_id):
+    target = user_rep.find_user_by_id(user_id)
+    if not target:
+        return jsonify({'error': 'User not found'}), 404
+    #target_user = User(target)
+    current_user.unfollow(target)
+    return jsonify({'message': f'You have unfollowed {target.username}'}), 200

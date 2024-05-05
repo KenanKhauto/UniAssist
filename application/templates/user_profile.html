@@ -7,6 +7,30 @@
           <h2 class="account-heading">{{ username }}</h2>
           <p class="text-secondary">{{ email }}</p>
         </div>
+
+        {% if is_following %}
+        <button id="unfollowBtn" data-user-id="{{ user_id }}">Unfollow</button>
+        {% else %}
+        <button id="followBtn" data-user-id="{{ user_id }}">Follow</button>
+        {% endif %}
+          <script>
+              document.getElementById('{{ "unfollowBtn" if is_following else "followBtn" }}').addEventListener('click', function() {
+                const userId = this.getAttribute('data-user-id');
+                const action = this.textContent.trim().toLowerCase();
+                fetch(`/${action}/${userId}`, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({})
+                })
+                .then(response => response.json())
+                .then(data => {
+                  window.location.reload(); // Reload the page to update the button state
+                })
+                .catch(error => console.error('Error:', error));
+              });
+        </script>
       </div>
     </div>
 
