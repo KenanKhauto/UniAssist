@@ -13,7 +13,8 @@ def create_app():
     app = Flask(__name__)
 
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
-    app.config['MONGO_URI'] = "mongodb+srv://kenan:Yyecgaa123123@cluster0.s0aykgz.mongodb.net/UniAssistDB" # os.environ.get('MONGO_URI')
+    app.config['MONGO_URI'] = os.environ.get('MONGO_URI')
+
 
     
     mongo.init_app(app)
