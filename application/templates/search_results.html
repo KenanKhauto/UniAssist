@@ -9,7 +9,7 @@
         {% for user in users %}
             <div class="content-section">
                 <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}">
-                <a href="#">{{ user.username }}</a>
+                <a href="{{ url_for('users.user_profile', user_id=user.id) }}">{{ user.username }}</a>
             </div>
         {% endfor %}
     {% endif %}

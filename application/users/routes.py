@@ -3,7 +3,7 @@ from flask import Blueprint
 from flask import render_template, request, redirect, Blueprint, flash, url_for
 from application import bcrypt, login_manager
 from .forms import RegistrationForm, LoginForm, UpdateAccountForm
-from application.custom import user_rep
+from application.custom import user_rep, post_rep
 from flask_login import login_user, current_user, logout_user, login_required
 from .utils import save_picture
 
@@ -110,6 +110,29 @@ def account():
     
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
 
+    posts = post_rep.find_posts_by_author(current_user.id)
     return render_template('account.html', title='Account',
-                           image_file=image_file, form=form)
+                           image_file=image_file, 
+                           form=form, 
+                           posts=posts)
+
+
+@users.route("/user/<int:user_id>")
+def user_profile(user_id):
+    if current_user.id == user_id:
+        return redirect(url_for('users.account'))
+    
+    posts = post_rep.find_posts_by_author(user_id)
+    user = user_rep.find_user_by_id(user_id)
+    username = user.username
+    email = user.email
+    image_file = user.image_file 
+    print(image_file)
+
+    return render_template('user_profile.html', title='Account',
+                            image_file=image_file, 
+                            posts=posts,
+                            username=username,
+                            email=email)
+
 

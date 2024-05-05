@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="content-section">
+      <div class="media">
+        <img class="rounded-circle account-img" src="{{ url_for('static', filename='profile_pics/' + image_file) }}">
+        <div class="media-body">
+          <h2 class="account-heading">{{ username }}</h2>
+          <p class="text-secondary">{{ email }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-section">
+        {%if posts%}
+            {% for post in posts %}
+            <article class="media content-section article-section" style="display: flex; justify-content: left;">
+                <img class="rounded-circle article-img " style="height: 66px; width: 66px;" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
+                <div class="media-body">
+                    <div class="article-metadata mt-3 mb-2">
+                        <a class="mr-4" href="#"> @{{ post.author.username }} </a>
+                        <small class="text-muted" style="margin-left: 5px;">{{ post.date_posted.strftime('%d.%m.%Y, %H:%M') }}</small>
+                    </div>
+                    <h2><a class="article-title" href="{{ url_for('post.post_page', post_id=post.id) }}">{{ post.title }}</a></h2>
+                    <p class="article-content">{{ post.content }}</p>
+                    
+                </div>
+            </article>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock content %}
