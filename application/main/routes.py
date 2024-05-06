@@ -2,6 +2,7 @@
 
 from flask import render_template, request, redirect, Blueprint, flash, url_for, current_app
 from application.custom import user_rep, post_rep
+from flask_login import current_user
 
 main = Blueprint('main', __name__)
 
@@ -17,8 +18,11 @@ def home():
     """
     #page = request.args.get('page', 1, type=int)
     posts = post_rep.find_posts()
+    following_users = []
+    if current_user.is_authenticated:
+        following_users = user_rep.get_following_as_list_of_users(current_user)
 
-    return render_template("home.html", title="Home", posts=posts)
+    return render_template("home.html", title="Home", posts=posts, following_users=following_users)
 
 
 @main.route("/about")

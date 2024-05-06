@@ -175,3 +175,30 @@ class UserRepository:
         filter = {'_id': user.id}
         new_task = {"$set" : {"my_tasks.$[elem].description" : description}} 
         mongo.db.users.update_one(filter, new_task, array_filters=[{"elem._id": task_id}])
+
+
+    def get_following_list_by_id(self, user):
+        filter = {"_id": user.id}
+        
+        user_data = mongo.db.users.find_one(filter, {'following': 1})
+
+        # Check if the user_data contains the 'following' field
+        if user_data and 'following' in user_data:
+            # Return the list of user IDs that this user is following
+            return user_data['following']
+        else:
+            # Return an empty list if the 'following' field is not found
+            return []
+        
+    def get_following_as_list_of_users(self, user):
+
+        following_list = self.get_following_list_by_id(user)
+        u_list = []
+
+        if following_list:
+            for id in following_list:
+                user_ = self.find_user_by_id(id)
+                if user_:
+                    u_list.append(user_)
+                
+        return u_list

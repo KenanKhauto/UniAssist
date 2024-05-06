@@ -112,10 +112,13 @@ def account():
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
 
     posts = post_rep.find_posts_by_author(current_user.id)
+    following_users = user_rep.get_following_as_list_of_users(current_user)
+
     return render_template('account.html', title='Account',
                            image_file=image_file, 
                            form=form, 
-                           posts=posts)
+                           posts=posts,
+                           following_users=following_users)
 
 
 @users.route("/user/<int:user_id>")
@@ -134,7 +137,7 @@ def user_profile(user_id):
 
     is_following = current_user.id in user.followers
 
-    return render_template('user_profile.html', title='Account',
+    return render_template('user_profile.html', title=username,
                             image_file=image_file, 
                             posts=posts,
                             username=username,

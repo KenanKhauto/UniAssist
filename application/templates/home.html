@@ -17,3 +17,18 @@
     </article>
   {% endfor %}
 {% endblock content %}
+
+{% block rightcontent%} 
+    <div class="content-section following-list">
+        <div class="following-list-title">
+            You are following:
+        </div>
+
+        {% for user in following_users %}
+        <div class="following-entry">
+            <img src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}" alt="{{ user.username }}" class="following-img">
+            <a href="{{ url_for('users.user_profile', user_id=user.id) }}" class="following-name">{{ user.username }}</a>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock rightcontent %}
